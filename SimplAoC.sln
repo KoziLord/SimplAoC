@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33122.133
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimplAoC.Test", "SimplAoC.Test\SimplAoC.Test.csproj", "{219E7DD9-1636-4ACF-9C4F-2CB2BA93B66E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimplAoC", "SimplAoC\SimplAoC.csproj", "{EECEE441-8368-4384-8D18-3FEC469377E0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{219E7DD9-1636-4ACF-9C4F-2CB2BA93B66E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{219E7DD9-1636-4ACF-9C4F-2CB2BA93B66E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{219E7DD9-1636-4ACF-9C4F-2CB2BA93B66E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{219E7DD9-1636-4ACF-9C4F-2CB2BA93B66E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EECEE441-8368-4384-8D18-3FEC469377E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EECEE441-8368-4384-8D18-3FEC469377E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EECEE441-8368-4384-8D18-3FEC469377E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EECEE441-8368-4384-8D18-3FEC469377E0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1738C621-497D-405B-8C8F-0427BF79656D}
+	EndGlobalSection
+EndGlobal
