@@ -29,6 +29,12 @@ namespace SimplAoC.Test
             var epicSIMDstr = "1234";
             return Unsafe.As<string>(Unsafe.As<object>(epicSIMDstr));
         }
+
+        [AoCDay(1)]
+        public static int Day1BadSig(int input)
+        {
+            return input + 10;
+        }
     }
 
     public class BasedSolutions

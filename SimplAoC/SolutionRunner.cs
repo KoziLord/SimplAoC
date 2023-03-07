@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace SimplAoC
 {
@@ -39,8 +40,23 @@ namespace SimplAoC
             {
 
                 var attr = func.GetCustomAttribute<AoCUnionAttribute>();
-                if (attr is null || !func.IsValidSignature())
+                if (attr is null)
                     continue;
+                if (!func.IsValidSignature())
+                {
+                    var par = func.GetParameters();
+
+                    var builder = new StringBuilder(1024);
+                    builder.Append('(');
+                    builder.AppendJoin(", ", par.Select(static info => info.ParameterType.Name));
+                    builder.Append(')');
+
+                    Console.WriteLine($"INVALID SIGNATURE: {func.Name}.\n" +
+                        $"Expected (string) => string,\n" +
+                        $"Got {builder} => {func.ReturnType.Name}\n");
+
+                    continue;
+                }
 
                 Identifier id = attr switch
                 {
