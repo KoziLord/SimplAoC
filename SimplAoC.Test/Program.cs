@@ -1,6 +1,6 @@
-﻿using System.Runtime.CompilerServices;
-
-using SimplAoC;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace SimplAoC.Test
 {
@@ -8,8 +8,11 @@ namespace SimplAoC.Test
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Input your session cookie:");
+            SolutionRunner.SessionCookie = Console.ReadLine();
+
             SolutionRunner.RunFromClass<Solutions>();
-            SolutionRunner.RunFromClass<BasedSolutions>();
+
         }
     }
 
@@ -18,38 +21,54 @@ namespace SimplAoC.Test
     public class Solutions
     {
         [AoCDay(1)]
+        public static string Day1Fake(string input)
+        {
+            return "xd";
+        }
+
+        //SPOILERS
+        //SPOILERS
+        //SPOILERS
+        //SPOILERS
+        //SPOILERS
+        //SPOILERS
+        #region SPOILERS
+        //SPOILERS
+        //SPOILERS
+        //SPOILERS
+        //SPOILERS
+        //SPOILERS
+        //SPOILERS
+        [AoCDay(1)]
         public static string Day1(string input)
         {
-            return input;
-        }
+            var lines = input.Split('\n');
+            List<int> dwarves = new();
 
-        [AoCDay(1)]
-        public static string Day1SIMD(string input)
-        {
-            var epicSIMDstr = "1234";
-            return Unsafe.As<string>(Unsafe.As<object>(epicSIMDstr));
-        }
+            dwarves.Add(0);
 
-        [AoCDay(1)]
-        public static int Day1BadSig(int input)
-        {
-            return input + 10;
-        }
-    }
+            foreach (var line in lines)
+            {
+                if (line == "")
+                    dwarves.Add(0);
+                else
+                    dwarves[dwarves.Count-1] += int.Parse(line);
+            }
 
-    public class BasedSolutions
-    {
-        [AoCDate(2022, 1)]
-        public static string Day1(string input)
-        {
-            return input;
-        }
+            int largestIndex = -1;
+            int largestDwarf = -1;
 
-        [AoCDate(2022, 1)]
-        public static string Day1SIMD(string input)
-        {
-            var epicSIMDstr = "1234";
-            return Unsafe.As<string>(Unsafe.As<object>(epicSIMDstr));
+            int i = 0;
+            foreach (var dwarf in dwarves)
+            {
+                if (dwarf > largestDwarf)
+                    (largestDwarf, largestIndex) = (dwarf, i);
+
+                i++;
+            }
+
+            return largestDwarf.ToString();
         }
+#endregion
     }
 }

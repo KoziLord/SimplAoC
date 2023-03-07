@@ -1,5 +1,6 @@
-﻿using System.Diagnostics;
-using System.Linq.Expressions;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -9,16 +10,41 @@ namespace SimplAoC
 {
     public static class SolutionRunner
     {
-        private static DayInfo[][]? Infos;
-
-        static SolutionRunner()
+        private static string? _cookie;
+        public static string? SessionCookie
         {
-            Infos = new DayInfo[7][];
+            get => _cookie;
+            set 
+            {
+                _cookie = value;
+                client.DefaultRequestHeaders.Remove("cookie");
+                client.DefaultRequestHeaders.Add("cookie", $"session={SessionCookie}");
+            }
+        }   
+        private static Dictionary<(int Year, int Day), string> inputs = new();
+        private static HttpClient client = new HttpClient();
 
-            Infos[6] = new DayInfo[30];
-            Infos[6][0] = new DayInfo("ABCD", "1234", null);
+        private static bool TryGetInput(int year, int day, out string? input)
+        { 
+            if (inputs.TryGetValue((year, day), out input))
+                return true;
+
+            try
+            {
+                var str = client.GetStringAsync($"https://adventofcode.com/{year}/day/{day}/input").Result;
+
+                inputs.Add((year, day), str);
+
+                input = str;
+                return true;
+            }
+
+            catch
+            {
+                input = null;
+                return false;
+            }
         }
-
         public static void RunAll()
         { 
             
@@ -38,10 +64,12 @@ namespace SimplAoC
             
             foreach (MethodInfo func in funcs)
             {
+                
 
                 var attr = func.GetCustomAttribute<AoCUnionAttribute>();
                 if (attr is null)
                     continue;
+
                 if (!func.IsValidSignature())
                 {
                     var par = func.GetParameters();
@@ -69,20 +97,25 @@ namespace SimplAoC
                 if (!id.IsSet())
                     throw new Exception("Fuck");
 
-                var info = Infos[id.Year - 2016][id.Day - 1];
-
+                bool ok = TryGetInput(id.Year, id.Day, out var input);
+                if (!ok)
+                {
+                    Console.WriteLine($"Skipping {func.Name}, could not load the input for Day {id.Day} of Year {id.Year}");
+                    continue;
+                }
                 Console.WriteLine($"Running {func.Name} from {id}");
-                string output = (string)func.Invoke(null, new object[] { info.Input });
+                string? output = (string?)func.Invoke(null, new object[] { input });
 
-                if (output == info[id.Part - 1])
+                if (output != null)
                     Console.WriteLine($"Pass! Output:\n{output}");
                 else
                     Console.WriteLine($"Fail. Output:\n{output}");
+
             }
         }
 
         /// <summary>
-        /// Checks if the signature matches (string) => string
+        /// Checks if the Method signature matches (string) => string
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
@@ -100,28 +133,6 @@ namespace SimplAoC
         }
     }
 
-    
-
-    public readonly struct DayInfo
-    {
-        public readonly string Input, Part1;
-        public readonly string? Part2;
-
-        public DayInfo(string input, string part1, string? part2) 
-        {
-            (Input, Part1, Part2) = (input, part1, part2); 
-        }
-
-        /// <summary>
-        /// Part Indexer
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public string this[int index]
-        {
-            get => MemoryMarshal.CreateReadOnlySpan(ref Unsafe.AsRef(in Part1), 2)[index];
-        }
-    }
     /// <summary>
     /// 
     /// </summary>
