@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
@@ -23,6 +25,59 @@ namespace SimplAoC
         }   
         private static Dictionary<(int Year, int Day), string> inputs = new();
         private static HttpClient client = new HttpClient();
+
+        private static void CacheInputsToFile()
+        {
+            var filePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location.AsSpan())}/InputCache.kas";
+
+            var file = File.OpenWrite(filePath);
+
+            foreach (var entry in inputs)
+            {
+                file.Write(entry.Key);
+                file.Write(entry.Value.Length);
+                file.Write(MemoryMarshal.Cast<char, byte>(entry.Value.AsSpan()));
+            }
+
+            file.Close();
+        }
+        /*
+        private static void ReadInputsFromFile()
+        {
+            List<byte> builder = new(1024 * 4);
+            Span<byte> buffer = stackalloc byte[1024];
+
+            
+            var filePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location.AsSpan())}/InputCache.kas";
+
+            FileStream file;
+            try
+            {
+                file = File.OpenRead(filePath);
+            }
+            catch
+            {
+                return;
+            };
+            var readBytes = 0;
+            do
+            {
+                (int, int, int) info = default;
+                var slice = MemoryMarshal.CreateSpan(ref Unsafe.As<(int, int, int), byte>(ref info), 12);
+                readBytes = file.Read(slice);
+                var (year, day, leftToRead) = info;
+
+                do
+                {
+                    readBytes = file.Read(buffer);
+                    builder.AddRange(buffer.Slice(0, readBytes));
+                } while (readBytes != 0);
+
+                var str = MemoryMarshal.Cast<byte, char>(CollectionsMarshal.AsSpan(builder));
+                inputs.Add((year, day), )
+            } while (readBytes != 0);
+        }
+        */
 
         private static bool TryGetInput(int year, int day, out string? input)
         { 
@@ -112,6 +167,8 @@ namespace SimplAoC
                     Console.WriteLine($"Fail. Output:\n{output}");
 
             }
+
+            CacheInputsToFile();
         }
 
         /// <summary>

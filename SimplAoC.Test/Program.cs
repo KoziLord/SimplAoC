@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace SimplAoC.Test
@@ -12,7 +14,6 @@ namespace SimplAoC.Test
             SolutionRunner.SessionCookie = Console.ReadLine();
 
             SolutionRunner.RunFromClass<Solutions>();
-
         }
     }
 
@@ -24,6 +25,11 @@ namespace SimplAoC.Test
         public static string Day1Fake(string input)
         {
             return "xd";
+        }
+        [AoCDay(2)]
+        public static string Day2Fake(string input)
+        {
+            return "no";
         }
 
         //SPOILERS
